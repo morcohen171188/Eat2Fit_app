@@ -1,7 +1,11 @@
 package com.example.mor17_000.eat2fit_app;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -11,11 +15,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
+    private static final String addNewUserApiCall = "https://eat2fit-restapi.herokuapp.com/user";
+    SharedPreferences userPref;
+    private int newUserId;
+    private ProgressDialog progressDialog;
+    private Boolean isSignUpSuccsessful = false;
 
     @BindView(R.id.input_name) EditText _nameText;
     @BindView(R.id.input_email) EditText _emailText;
@@ -29,6 +42,12 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
+        userPref = getSharedPreferences("userPref", Context.MODE_PRIVATE);
+
+        progressDialog = new ProgressDialog(SignupActivity.this,
+                R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Creating Account...");
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +68,45 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.registerReceiver(receiver, new IntentFilter("POST"));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        this.unregisterReceiver(receiver);
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            // logic for the reciver of the rest task returned data
+            String response = intent.getStringExtra(RestTask.REST_RESPONSE);
+            newUserId = Integer.parseInt(response);
+            SharedPreferences.Editor editor = userPref.edit();
+
+            editor.putInt("userId", newUserId);  // set values
+            editor.putBoolean("logged",true).apply();
+            isSignUpSuccsessful = true;
+
+            Log.i(TAG, "RESPONSE = " + newUserId);
+
+            if (isSignUpSuccsessful)
+            {
+                onSignupSuccess();
+            }else {
+                onSignupFailed();
+            }
+
+            progressDialog.hide();
+        }
+    };
+
     public void signup() {
         Log.d(TAG, "Signup");
 
@@ -59,39 +117,56 @@ public class SignupActivity extends AppCompatActivity {
 
         _signupButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
         String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-        String reEnterPassword = _reEnterPasswordText.getText().toString();
 
-        // TODO: Implement your own signup logic here.
+        // creating basic Json data without preferences
+        JSONArray previouslyLikedDefaultEmptyArray = new JSONArray();
+        JSONObject userPreferencesJsonObj = new JSONObject();
+        JSONArray LikedJsonArray = new JSONArray();
+        JSONArray DislikedJsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+        try {
+            userPreferencesJsonObj.accumulate("KOSHER", "0");
+            userPreferencesJsonObj.accumulate("VEGETARIAN", "0");
+            userPreferencesJsonObj.accumulate("VEGAN", "0");
+            userPreferencesJsonObj.accumulate("LIKED", LikedJsonArray);
+            userPreferencesJsonObj.accumulate("DISLIKED", DislikedJsonArray);
+
+            // build jsonObject
+
+            jsonObject.accumulate("userId", "replace");
+            jsonObject.accumulate("userName", name);
+            jsonObject.accumulate("userEmail", email);
+            jsonObject.accumulate("userPass", password);
+            jsonObject.accumulate("userPreferences", userPreferencesJsonObj);
+            jsonObject.accumulate("previouslyLiked", previouslyLikedDefaultEmptyArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RestTask task = new RestTask(getApplicationContext(),"POST");
+        task.SetUrl(addNewUserApiCall);
+        task.SetJsonData(jsonObject);
+        task.execute();
     }
-
 
     public void onSignupSuccess() {
         _signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
-        //finish();
+
+        SharedPreferences.Editor editor = userPref.edit();
+
+        editor.putInt("userId", newUserId);  // set values
+        editor.putBoolean("logged",true).apply();
+
         Intent intent = new Intent(getApplicationContext(), QuestionnaireActivity.class);
         startActivity(intent);
-
+        finish();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
