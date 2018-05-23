@@ -34,4 +34,5 @@ dependencies {
     compile 'com.android.support:design:26.1.0'
     compile 'com.polyak:icon-switch:1.0.0'
     compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
 }

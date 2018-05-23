@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
-    private static final String allUsersApiCall = "https://eat2fit-restapi.herokuapp.com/users";
+    private static final String GET_ALL_USERS_API_CALL = "https://eat2fit-restapi.herokuapp.com/users";
     SharedPreferences userPref;
     RestClient client = new RestClient();
     String AllUsersData;
@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Create a rest task to get all users data
         RestTask task = new RestTask(getApplicationContext(),"GET");
-        task.SetUrl(allUsersApiCall);
+        task.SetUrl(GET_ALL_USERS_API_CALL);
         task.execute();
 
         _loginButton.setOnClickListener(new View.OnClickListener() {

@@ -11,7 +11,6 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import java.net.URL;
 
 public class RestTask extends AsyncTask<Void, Void, String>{
     private static final String TAG = "AARestTask";

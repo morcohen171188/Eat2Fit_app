@@ -40,14 +40,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // TODO: GET REST LOCATION
+        // get the rest location
         mMap = googleMap;
         String restaurantName = userPref.getString("restaurantName", "");
-        int restLat = userPref.getInt("locationLat", 0);
-        int restLng = userPref.getInt("locationLng", 0);
+        String restLat = userPref.getString("locationLat", "0");
+        String restLng = userPref.getString("locationLng", "0");
 
         // Add a marker and move the camera
-        LatLng restaurant = new LatLng(restLat, restLng);
+        LatLng restaurant = new LatLng(Double.parseDouble(restLat), Double.parseDouble(restLng));
         mMap.addMarker(new MarkerOptions().position(restaurant).title(restaurantName));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(restaurant));
     }

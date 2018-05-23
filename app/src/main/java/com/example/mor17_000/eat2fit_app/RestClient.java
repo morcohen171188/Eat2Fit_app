@@ -1,6 +1,6 @@
 package com.example.mor17_000.eat2fit_app;
 
-import org.json.JSONArray;
+
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -14,8 +14,6 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class RestClient {
-    public HttpsURLConnection myConnection = null;
-
     public static final String REQUEST_METHOD_GET = "GET";
     public static final String REQUEST_METHOD_POST = "POST";
     public static final int READ_TIMEOUT = 15000;
