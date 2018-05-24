@@ -119,7 +119,7 @@ public class MainActivity extends EasyLocationAppCompatActivity {
     }
 
     public void searchButtonClicked(String restName){
-        restaurantName = restName;
+        restaurantName = restName.replace(" ", "%20");
         isButtonPressed = true;
         setTableVisabilityGone();
         gif.setVisibility(View.VISIBLE);
