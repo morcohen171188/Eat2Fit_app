@@ -19,6 +19,7 @@ public class FileHandler {
 
     public Boolean writeToFile(Context context, String fileContents){
         try {
+            fileContents = fileContents +"\n";
             FileOutputStream outputStream = context.getApplicationContext().openFileOutput(filename, Context.MODE_APPEND);
             outputStream.write(fileContents.getBytes());
             outputStream.close();
