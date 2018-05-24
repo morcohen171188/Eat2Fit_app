@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         // Check if the user already logged in
         if(userPref.getBoolean("logged",false)){
             // go to the main activity
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), RateActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         }

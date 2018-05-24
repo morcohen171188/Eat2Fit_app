@@ -75,7 +75,6 @@ public class MainActivity extends EasyLocationAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO : DESIGN
-        // TODO : RATE DISH
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         userPref = getSharedPreferences("userPref", Context.MODE_PRIVATE);
@@ -132,15 +131,8 @@ public class MainActivity extends EasyLocationAppCompatActivity {
         ImageView rowImage = (ImageView)tableRow.getChildAt(0);
         TextView rowText = (TextView)tableRow.getChildAt(1);
         String text = rowText.getText().toString();
-        // TODO : WRITE TO FILE
         FileHandler fileHandler = new FileHandler();
-        fileHandler.writeToFile(getApplicationContext(), "here");
-        fileHandler.writeToFile(getApplicationContext(), "mor");
-        try {
-            fileHandler.readFromFile(getApplicationContext());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        fileHandler.writeToFile(getApplicationContext(), restaurantName + ":" + text + ":" + rowImage + "\n");
     }
 
     public void NavigationTextClicked(View view) {
@@ -336,15 +328,36 @@ public class MainActivity extends EasyLocationAppCompatActivity {
             Log.i("INFO", data);
             try {
                 JSONArray jsonArr = new JSONArray(data.toString());
-                //tvRow1.setText(jsonArr.get(0));
+
                 JSONObject jobj = new JSONObject(jsonArr.get(0).toString());
                 Iterator<String> keys = jobj.keys();
                 String str_Name = keys.next();
                 String value = jobj.optString(str_Name);
-
-
                 tvRow1.setText(str_Name + "\n" + value + "%");
-                jsonArr.length();
+
+                jobj = new JSONObject(jsonArr.get(1).toString());
+                keys = jobj.keys();
+                str_Name = keys.next();
+                value = jobj.optString(str_Name);
+                tvRow2.setText(str_Name + "\n" + value + "%");
+
+                //jobj = new JSONObject(jsonArr.get(2).toString());
+                keys = jobj.keys();
+                str_Name = keys.next();
+                value = jobj.optString(str_Name);
+                tvRow3.setText(str_Name + "\n" + value + "%");
+
+                //jobj = new JSONObject(jsonArr.get(3).toString());
+                keys = jobj.keys();
+                str_Name = keys.next();
+                value = jobj.optString(str_Name);
+                tvRow4.setText(str_Name + "\n" + value + "%");
+
+                //jobj = new JSONObject(jsonArr.get(4).toString());
+                keys = jobj.keys();
+                str_Name = keys.next();
+                value = jobj.optString(str_Name);
+                tvRow5.setText(str_Name + "\n" + value + "%");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
