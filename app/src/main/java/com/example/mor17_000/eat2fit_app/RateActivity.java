@@ -40,7 +40,7 @@ public class RateActivity extends AppCompatActivity {
         userPref = getSharedPreferences("userPref", Context.MODE_PRIVATE);
         userId = userPref.getInt("userId", 0);
 
-
+        showToast("Swipe right to like, left to dislike.");
         mLinearLayout = (LinearLayout) findViewById(R.id.cardLayout);
        // fillInDishesToRate();
         createCardWiew("hello",1);
@@ -59,6 +59,10 @@ public class RateActivity extends AppCompatActivity {
     public boolean dispatchTouchEvent(MotionEvent ev){
         onSwipeTouchListener.getGestureDetector().onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 

@@ -1,4 +1,5 @@
 package com.example.mor17_000.eat2fit_app;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -124,6 +126,7 @@ public class MainActivity extends EasyLocationAppCompatActivity {
         taskReccomend = new RestTask(getApplicationContext(),"GET");
         taskReccomend.SetUrl(String.format(CALC_RECCOMENDED_API_URL,restaurantName,userPref.getInt("userId", 0)));
         taskReccomend.execute();
+        hideKeyboard(this);
     }
 
     public void myTableRowClickHandler(View view) {
@@ -171,6 +174,16 @@ public class MainActivity extends EasyLocationAppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
     @Override
     public void onLocationPermissionGranted() {
 
