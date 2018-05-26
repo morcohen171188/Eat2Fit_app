@@ -1,79 +1,92 @@
 package com.example.mor17_000.eat2fit_app;
 
+import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
-/**
- * Created by mor17_000 on 24-May-18.
- */
+import java.util.ArrayList;
 
 public class OnSwipeTouchListener implements View.OnTouchListener {
 
-    View view;
-    private final GestureDetector gestureDetector = new GestureDetector(new GestureListener());
+    ListView list;
+    ArrayList<RestaurantDish> dataArray;
+    private GestureDetector gestureDetector;
+    private Context context;
 
-    public GestureDetector getGestureDetector(){
-        return  gestureDetector;
+    public OnSwipeTouchListener(Context ctx, ListView list, ArrayList<RestaurantDish> dataArray) {
+        gestureDetector = new GestureDetector(ctx, new GestureListener());
+        context = ctx;
+        this.list = list;
+        this.dataArray = dataArray;
     }
 
-    public boolean onTouch(final View v, final MotionEvent event) {
-        view = v;
+    public OnSwipeTouchListener() {
+        super();
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
     }
 
-    public View getView(){
-        return view;
+    public void onSwipeRight(int pos) {
+        RestaurantDish card = (RestaurantDish) this.list.getItemAtPosition(pos);
+        if(card != null){
+            card.imgLike = "LIKE";
+
+            ((BaseAdapter)this.list.getAdapter()).notifyDataSetChanged();
+        }
+
+
+
     }
+
+    public void onSwipeLeft(int pos) {
+
+        RestaurantDish card = (RestaurantDish) this.list.getItemAtPosition(pos);
+        if(card != null){
+            card.imgLike = "DISLIKE";
+
+            ((BaseAdapter)this.list.getAdapter()).notifyDataSetChanged();
+        }
+
+        //Do what you want after swiping right to left
+    }
+
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
         private static final int SWIPE_THRESHOLD = 100;
         private static final int SWIPE_VELOCITY_THRESHOLD = 100;
 
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        private int getPostion(MotionEvent e1) {
+            return list.pointToPosition((int) e1.getX(), (int) e1.getY());
+        }
 
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            boolean result = false;
-            try {
-                float diffY = e2.getY() - e1.getY();
-                float diffX = e2.getX() - e1.getX();
-                if (Math.abs(diffX) > Math.abs(diffY)) {
-                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffX > 0) {
-                            result = onSwipeRight();
-                        } else {
-                            result = onSwipeLeft();
-                        }
-                    }
-                } else {
-                    if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffY > 0) {
-                            result = onSwipeBottom();
-                        } else {
-                            result = onSwipeTop();
-                        }
-                    }
-                }
-            } catch (Exception exception) {
-                exception.printStackTrace();
+        public boolean onFling(MotionEvent e1, MotionEvent e2,
+                               float velocityX, float velocityY) {
+            float distanceX = e2.getX() - e1.getX();
+            float distanceY = e2.getY() - e1.getY();
+            if (Math.abs(distanceX) > Math.abs(distanceY)
+                    && Math.abs(distanceX) > SWIPE_THRESHOLD
+                    && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                if (distanceX > 0)
+                    onSwipeRight(getPostion(e1));
+                else
+                    onSwipeLeft(getPostion(e1));
+                return true;
             }
-            return result;
+            return false;
         }
-    }
 
-    public boolean onSwipeRight() {
-        return false;
-    }
-
-    public boolean onSwipeLeft() {
-        return false;
-    }
-
-    public boolean onSwipeTop() {
-        return false;
-    }
-
-    public boolean onSwipeBottom() {
-        return false;
     }
 }

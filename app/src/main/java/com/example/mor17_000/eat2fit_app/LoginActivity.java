@@ -45,7 +45,8 @@ public class LoginActivity extends AppCompatActivity {
         userPref = getSharedPreferences("userPref", Context.MODE_PRIVATE);
 
         // Check if the user already logged in
-        if(userPref.getBoolean("logged",false)){
+       if(userPref.getBoolean("logged",false)){
+           //FileHandler.deleteInternalFile(getApplicationContext());
             // go to the main activity
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);

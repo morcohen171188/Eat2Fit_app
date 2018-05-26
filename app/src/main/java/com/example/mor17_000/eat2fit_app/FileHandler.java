@@ -19,6 +19,7 @@ public class FileHandler {
 
     public Boolean writeToFile(Context context, String fileContents){
         try {
+            fileContents = fileContents.replace("\n", " - ");
             fileContents = fileContents +"\n";
             FileOutputStream outputStream = context.getApplicationContext().openFileOutput(filename, Context.MODE_APPEND);
             outputStream.write(fileContents.getBytes());
@@ -43,5 +44,11 @@ public class FileHandler {
         }
 
         return file;
+    }
+
+    public static boolean deleteInternalFile(Context context){
+        File dir = context.getFilesDir();
+        File file = new File(dir, "Eat2Fit_UnratedDishes");
+        return file.delete();
     }
 }

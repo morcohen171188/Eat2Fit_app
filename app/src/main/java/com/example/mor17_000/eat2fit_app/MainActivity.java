@@ -5,20 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -34,22 +26,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends EasyLocationAppCompatActivity {
     SharedPreferences userPref;
     ArrayList<String> restLocations = new ArrayList<>();
+    HashMap hmRestDishes = new HashMap();
     Boolean isButtonPressed = false;
     Boolean isRestAutoFind = false;
     TextView tvNavigate;
@@ -131,11 +117,12 @@ public class MainActivity extends EasyLocationAppCompatActivity {
 
     public void myTableRowClickHandler(View view) {
         TableRow tableRow = (TableRow) findViewById(view.getId());
-        ImageView rowImage = (ImageView)tableRow.getChildAt(0);
         TextView rowText = (TextView)tableRow.getChildAt(1);
         String text = rowText.getText().toString();
+        String dishName = text.split("\n")[0];
         FileHandler fileHandler = new FileHandler();
-        fileHandler.writeToFile(getApplicationContext(), restaurantName + ":" + text + ":" + rowImage + "\n");
+        fileHandler.writeToFile(getApplicationContext(), restaurantName + "!" + text + "!" + getImageUrl(dishName));
+        goToRateActivity(null);
     }
 
     public void NavigationTextClicked(View view) {
@@ -174,6 +161,13 @@ public class MainActivity extends EasyLocationAppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    public void goToRateActivity(View view){
+        // go to the rate activity
+        Intent intent = new Intent(getApplicationContext(), RateActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+    }
+
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
@@ -200,16 +194,18 @@ public class MainActivity extends EasyLocationAppCompatActivity {
             for (int restIndex = 0; restIndex < restLocations.size(); restIndex++){
                 String restLocationData = restLocations.get(restIndex);
                 String[] separatedData = restLocationData.split(":");
-                String  restName = separatedData[0];
-                double restLatitude = Double.parseDouble(separatedData[1]);
-                double restLongitude = Double.parseDouble(separatedData[2]);
+                if (separatedData.length > 0) {
+                    String restName = separatedData[0];
+                    double restLatitude = Double.parseDouble(separatedData[1]);
+                    double restLongitude = Double.parseDouble(separatedData[2]);
 
-                if(isCloseLocation(restLatitude, restLongitude,
-                                   location.getLatitude(), location.getLongitude())){
-                    restaurantName = restName;
-                    isRestAutoFind = true;
-                    searchButtonClicked(restaurantName);
-                    break;
+                    if (isCloseLocation(restLatitude, restLongitude,
+                            location.getLatitude(), location.getLongitude())) {
+                        restaurantName = restName;
+                        isRestAutoFind = true;
+                        searchButtonClicked(restaurantName);
+                        break;
+                    }
                 }
             }
 
@@ -318,6 +314,16 @@ public class MainActivity extends EasyLocationAppCompatActivity {
                 String restLongitude = ((JSONObject)jsonArr.get(restIndex)).optString("restLongitude");
                 String restLocationData = restName+":"+restLatitude+":"+restLongitude;
                 restLocations.add(restLocationData);
+                JSONObject dishesParsed = new JSONObject();
+                JSONArray arrDishes = ((JSONArray)((JSONObject)jsonArr.get(restIndex)).get("Dishes"));
+                for (int i=0; i < arrDishes.length(); i++) {
+                    JSONObject dish = (JSONObject) arrDishes.get(i);
+                    HashMap hmDishesData = new HashMap();
+                    hmDishesData.put("ingredients", dish.getJSONArray("ingredients"));
+                    hmDishesData.put("imageUrl", dish.get("imageUrl"));
+                    dishesParsed.put(dish.getString("name"), hmDishesData);
+                }
+                hmRestDishes.put(restName,dishesParsed);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -340,43 +346,62 @@ public class MainActivity extends EasyLocationAppCompatActivity {
             setTableVisabilityOn();
             Log.i("INFO", data);
             try {
+
                 JSONArray jsonArr = new JSONArray(data.toString());
+                // TODO: GET EVERY DISH - ADD BORDER AROUND THE IMAGEVIEW
 
                 JSONObject jobj = new JSONObject(jsonArr.get(0).toString());
                 Iterator<String> keys = jobj.keys();
                 String str_Name = keys.next();
                 String value = jobj.optString(str_Name);
                 tvRow1.setText(str_Name + "\n" + value + "%");
+                ImageLoader.imageLoadFromWeb(getImageUrl(str_Name), imgRow1);
 
                 jobj = new JSONObject(jsonArr.get(1).toString());
                 keys = jobj.keys();
                 str_Name = keys.next();
                 value = jobj.optString(str_Name);
                 tvRow2.setText(str_Name + "\n" + value + "%");
+                ImageLoader.imageLoadFromWeb(getImageUrl(str_Name), imgRow2);
 
                 //jobj = new JSONObject(jsonArr.get(2).toString());
                 keys = jobj.keys();
                 str_Name = keys.next();
                 value = jobj.optString(str_Name);
                 tvRow3.setText(str_Name + "\n" + value + "%");
+                ImageLoader.imageLoadFromWeb(getImageUrl(str_Name), imgRow3);
+
 
                 //jobj = new JSONObject(jsonArr.get(3).toString());
                 keys = jobj.keys();
                 str_Name = keys.next();
                 value = jobj.optString(str_Name);
                 tvRow4.setText(str_Name + "\n" + value + "%");
+                ImageLoader.imageLoadFromWeb(getImageUrl(str_Name), imgRow4);
+
 
                 //jobj = new JSONObject(jsonArr.get(4).toString());
                 keys = jobj.keys();
                 str_Name = keys.next();
                 value = jobj.optString(str_Name);
                 tvRow5.setText(str_Name + "\n" + value + "%");
+                ImageLoader.imageLoadFromWeb(getImageUrl(str_Name), imgRow5);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    private String getImageUrl(String dishName){
+        String restNameWithSpaces = restaurantName.replace("%20", " ");
+        JSONObject restDishesData = (JSONObject) hmRestDishes.get(restNameWithSpaces);
+        try {
+            return ((HashMap)restDishesData.get(dishName)).get("imageUrl").toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
     private void startLocationIdentifier(){
 
         LocationRequest locationRequest = new LocationRequest()
