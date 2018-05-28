@@ -27,4 +27,12 @@
         <item name="android:background">@color/primary</item>
     </style>
 
+    <style name="SimpleBackground" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/login</item>
+    </style>
+
+    <style name="QuestionBackground" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/questions</item>
+    </style>
+
 </resources>

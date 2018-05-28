@@ -36,6 +36,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questionnaire);
+        this.getSupportActionBar().hide();
         ButterKnife.bind(this);
         userPref = getSharedPreferences("userPref", Context.MODE_PRIVATE);
         userId = userPref.getInt("userId", 0);

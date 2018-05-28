@@ -6,19 +6,14 @@
     android:layout_height="match_parent"
     tools:context="com.example.mor17_000.eat2fit_app.QuestionnaireActivity">
 
-    <ImageView android:src="@drawable/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="72dp"
-        android:layout_marginBottom="24dp"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/logo"/>
-
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="72dp"
-        android:layout_marginBottom="72dp"
-        android:fitsSystemWindows="true">
+        android:layout_marginBottom="100dp"
+        android:layout_marginTop="50dp"
+        android:fitsSystemWindows="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TableLayout
             android:layout_width="match_parent"
@@ -27,6 +22,7 @@
             android:paddingLeft="24dp"
             android:paddingRight="24dp"
             android:paddingTop="56dp">
+
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
@@ -42,9 +38,9 @@
                     android:id="@+id/SwitchKosher"
                     android:layout_width="74dp"
                     android:layout_height="40dp"
-                    android:layout_marginTop="20dp"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="right"
+                    android:layout_marginTop="20dp"
                     android:textOff="OFF"
                     android:textOn="ON"
                     android:thumb="@drawable/customswitchselector"
@@ -63,21 +59,23 @@
                     android:layout_height="38dp"
                     android:text="VEGAN"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-            <Switch
-                android:id="@+id/SwitchVegan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/SwitchKosher"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="right"
-                android:textOff="OFF"
-                android:textOn="ON"
-                android:thumb="@drawable/customswitchselector"
-                android:track="@drawable/custom_track"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/SwitchKosher" />
+
+                <Switch
+                    android:id="@+id/SwitchVegan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/SwitchKosher"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="20dp"
+                    android:textOff="OFF"
+                    android:textOn="ON"
+                    android:thumb="@drawable/customswitchselector"
+                    android:track="@drawable/custom_track"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/SwitchKosher" />
             </TableRow>
+
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
@@ -88,21 +86,23 @@
                     android:layout_height="wrap_content"
                     android:text="VEGETARIAN"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-            <Switch
-                android:id="@+id/SwitchVegetarian"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/SwitchVegan"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="right"
-                android:textOff="OFF"
-                android:textOn="ON"
-                android:thumb="@drawable/customswitchselector"
-                android:track="@drawable/custom_track"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/SwitchVegan" />
+
+                <Switch
+                    android:id="@+id/SwitchVegetarian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/SwitchVegan"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="20dp"
+                    android:textOff="OFF"
+                    android:textOn="ON"
+                    android:thumb="@drawable/customswitchselector"
+                    android:track="@drawable/custom_track"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/SwitchVegan" />
             </TableRow>
+
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
@@ -113,21 +113,23 @@
                     android:layout_height="wrap_content"
                     android:text="LOVES MEAT"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-            <Switch
-                android:id="@+id/SwitchMeat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvVegetarian"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="right"
-                android:textOff="OFF"
-                android:textOn="ON"
-                android:thumb="@drawable/customswitchselector"
-                android:track="@drawable/custom_track"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvVegetarian" />
+
+                <Switch
+                    android:id="@+id/SwitchMeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvVegetarian"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="20dp"
+                    android:textOff="OFF"
+                    android:textOn="ON"
+                    android:thumb="@drawable/customswitchselector"
+                    android:track="@drawable/custom_track"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvVegetarian" />
             </TableRow>
+
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
@@ -138,20 +140,21 @@
                     android:layout_height="wrap_content"
                     android:text="LOVES DAIRY"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-            <Switch
-                android:id="@+id/SwitchDairy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/SwitchMeat"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="right"
-                android:textOff="OFF"
-                android:textOn="ON"
-                android:thumb="@drawable/customswitchselector"
-                android:track="@drawable/custom_track"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/SwitchMeat" />
+
+                <Switch
+                    android:id="@+id/SwitchDairy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/SwitchMeat"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="20dp"
+                    android:textOff="OFF"
+                    android:textOn="ON"
+                    android:thumb="@drawable/customswitchselector"
+                    android:track="@drawable/custom_track"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/SwitchMeat" />
             </TableRow>
         </TableLayout>
     </ScrollView>
@@ -169,5 +172,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:onClick="btnSaveData"/>
+
 </android.support.constraint.ConstraintLayout>
 

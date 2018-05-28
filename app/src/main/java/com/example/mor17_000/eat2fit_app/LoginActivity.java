@@ -45,14 +45,14 @@ public class LoginActivity extends AppCompatActivity {
         userPref = getSharedPreferences("userPref", Context.MODE_PRIVATE);
 
         // Check if the user already logged in
-       if(userPref.getBoolean("logged",false)){
+       /*if(userPref.getBoolean("logged",false)){
            //FileHandler.deleteInternalFile(getApplicationContext());
             // go to the main activity
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         }
-
+*/
         // Create a rest task to get all users data
         RestTask task = new RestTask(getApplicationContext(),"GET");
         task.SetUrl(GET_ALL_USERS_API_CALL);
