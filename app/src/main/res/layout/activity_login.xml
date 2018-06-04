@@ -58,12 +58,11 @@
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_login"
         android:layout_width="150dp"
-        android:layout_height="42dp"
+        android:layout_height="65dp"
         android:layout_above="@+id/link_signup"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="29dp"
-        android:layout_weight="1"
-        android:background="@drawable/login_button"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/login"
         android:padding="12dp" />
 
     <TextView
@@ -73,7 +72,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="20dp"
-        android:layout_weight="1"
         android:gravity="center"
         android:text="No account yet? Create one"
         android:textSize="16dip" />

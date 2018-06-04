@@ -41,6 +41,7 @@ public class SignupActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        this.getSupportActionBar().hide();
         ButterKnife.bind(this);
         userPref = getSharedPreferences("userPref", Context.MODE_PRIVATE);
 

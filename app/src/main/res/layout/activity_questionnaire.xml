@@ -161,17 +161,18 @@
 
     <Button
         android:id="@+id/btnSendData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="143dp"
+        android:layout_height="46dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="28dp"
         android:layout_marginEnd="148dp"
         android:layout_marginStart="148dp"
-        android:text="Save Data"
+        android:background="@drawable/save_data"
+        android:onClick="btnSaveData"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:onClick="btnSaveData"/>
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
 

@@ -109,10 +109,10 @@
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_signup"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="65dp"
                 android:layout_marginBottom="24dp"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/create_account_button"
+                android:background="@drawable/create_account"
                 android:padding="12dp" />
 
             <TextView

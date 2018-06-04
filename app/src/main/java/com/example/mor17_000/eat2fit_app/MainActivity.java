@@ -65,6 +65,7 @@ public class MainActivity extends EasyLocationAppCompatActivity {
         // TODO : DESIGN
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.getSupportActionBar().hide();
         userPref = getSharedPreferences("userPref", Context.MODE_PRIVATE);
         gif = (pl.droidsonroids.gif.GifTextView) findViewById(R.id.loader_gif);
         tvNavigate = (TextView) findViewById(R.id.tvNavigate);

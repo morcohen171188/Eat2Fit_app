@@ -47,6 +47,7 @@ public class RateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rate);
+        this.getSupportActionBar().hide();
         userPref = getSharedPreferences("userPref", Context.MODE_PRIVATE);
         userId = userPref.getInt("userId", 0);
 
