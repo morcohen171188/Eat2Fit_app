@@ -334,8 +334,8 @@ public class MainActivity extends EasyLocationAppCompatActivity {
     }
 
     private void fillInTableWithData(String data){
-        if(data == null) {
-            showToast("THERE WAS AN ERROR");
+        if(data == null || data.equals("[]")) {
+            showToast("There was an error. Can't find a restaurant in this name.");
         }
         else {
 
@@ -345,11 +345,10 @@ public class MainActivity extends EasyLocationAppCompatActivity {
 
             resultHeader.setText(restaurantName);
             setTableVisabilityOn();
-            Log.i("INFO", data);
+            Log.i("INFO: ", data);
             try {
 
                 JSONArray jsonArr = new JSONArray(data.toString());
-                // TODO: GET EVERY DISH - ADD BORDER AROUND THE IMAGEVIEW
 
                 JSONObject jobj = new JSONObject(jsonArr.get(0).toString());
                 Iterator<String> keys = jobj.keys();
@@ -365,7 +364,7 @@ public class MainActivity extends EasyLocationAppCompatActivity {
                 tvRow2.setText(str_Name + "\n" + value + "%");
                 ImageLoader.imageLoadFromWeb(getImageUrl(str_Name), imgRow2);
 
-                //jobj = new JSONObject(jsonArr.get(2).toString());
+                jobj = new JSONObject(jsonArr.get(2).toString());
                 keys = jobj.keys();
                 str_Name = keys.next();
                 value = jobj.optString(str_Name);
@@ -373,7 +372,7 @@ public class MainActivity extends EasyLocationAppCompatActivity {
                 ImageLoader.imageLoadFromWeb(getImageUrl(str_Name), imgRow3);
 
 
-                //jobj = new JSONObject(jsonArr.get(3).toString());
+                jobj = new JSONObject(jsonArr.get(3).toString());
                 keys = jobj.keys();
                 str_Name = keys.next();
                 value = jobj.optString(str_Name);
@@ -381,7 +380,7 @@ public class MainActivity extends EasyLocationAppCompatActivity {
                 ImageLoader.imageLoadFromWeb(getImageUrl(str_Name), imgRow4);
 
 
-                //jobj = new JSONObject(jsonArr.get(4).toString());
+                jobj = new JSONObject(jsonArr.get(4).toString());
                 keys = jobj.keys();
                 str_Name = keys.next();
                 value = jobj.optString(str_Name);
@@ -395,7 +394,7 @@ public class MainActivity extends EasyLocationAppCompatActivity {
 
     private String getImageUrl(String dishName){
         String restNameWithSpaces = restaurantName.replace("%20", " ");
-        JSONObject restDishesData = (JSONObject) hmRestDishes.get(restNameWithSpaces);
+        JSONObject restDishesData = (JSONObject) hmRestDishes.get(restNameWithSpaces.toLowerCase());
         try {
             return ((HashMap)restDishesData.get(dishName)).get("imageUrl").toString();
         } catch (JSONException e) {
@@ -403,6 +402,7 @@ public class MainActivity extends EasyLocationAppCompatActivity {
             return "";
         }
     }
+
     private void startLocationIdentifier(){
 
         LocationRequest locationRequest = new LocationRequest()

@@ -125,7 +125,8 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         // creating basic Json data without preferences
-        JSONArray previouslyLikedDefaultEmptyArray = new JSONArray();
+        JSONArray previouslyDefaultEmptyArray = new JSONArray();
+        JSONArray previouslyDislikedDefaultEmptyArray = new JSONArray();
         JSONObject userPreferencesJsonObj = new JSONObject();
         JSONArray LikedJsonArray = new JSONArray();
         JSONArray DislikedJsonArray = new JSONArray();
@@ -145,7 +146,8 @@ public class SignupActivity extends AppCompatActivity {
             jsonObject.accumulate("userEmail", email);
             jsonObject.accumulate("userPass", password);
             jsonObject.accumulate("userPreferences", userPreferencesJsonObj);
-            jsonObject.accumulate("previouslyLiked", previouslyLikedDefaultEmptyArray);
+            jsonObject.accumulate("previouslyLiked", previouslyDefaultEmptyArray);
+            jsonObject.accumulate("previouslyDisliked", previouslyDislikedDefaultEmptyArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -172,7 +174,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Failed to sign up.", Toast.LENGTH_LONG).show();
 
         _signupButton.setEnabled(true);
     }

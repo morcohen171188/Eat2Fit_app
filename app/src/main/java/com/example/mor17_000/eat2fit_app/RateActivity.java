@@ -30,13 +30,13 @@ import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 public class RateActivity extends AppCompatActivity {
     SharedPreferences userPref;
     ArrayList<RestaurantDish> arrayOfDishes;
     DishesAdapter adapter;
     ListView listView;
+    String FILE_DELIMITER = "!";
     int userId;
     OnSwipeTouchListener onSwipeTouchListener;
     private  String UPDATE_PREVIOUSLY_LIKED = "https://eat2fit-restapi.herokuapp.com/user/%d/updatepreviously";
@@ -68,17 +68,24 @@ public class RateActivity extends AppCompatActivity {
         fillInDishesToRate();
 
     }
+
     public void saveData(View view){
         FileHandler.deleteInternalFile(getApplicationContext());
         JSONArray likedDishesArray = new JSONArray();
+        JSONArray dislikedDishesArray = new JSONArray();
         for (RestaurantDish dish : arrayOfDishes){
             if (dish.imgLike.equals("LIKE")){
                 String dishNameWithoutRate = dish.dishName.split(" - ")[0];
                 likedDishesArray.put(dish.restaurantName + ":" + dishNameWithoutRate);
             }
-            else if (!dish.imgLike.equals("DISLIKE")){
+            else if (dish.imgLike.equals("DISLIKE")){
+                String dishNameWithoutRate = dish.dishName.split(" - ")[0];
+                dislikedDishesArray.put(dish.restaurantName + ":" + dishNameWithoutRate);
+            }
+            else{
                 FileHandler fh = new FileHandler();
-                fh.writeToFile(getApplicationContext(), dish.restaurantName + "!" + dish.dishName + "!" + dish.imgUrl);
+                fh.writeToFile(getApplicationContext(), dish.restaurantName + FILE_DELIMITER
+                                                                + dish.dishName + FILE_DELIMITER + dish.imgUrl);
 
             }
         }
@@ -88,6 +95,7 @@ public class RateActivity extends AppCompatActivity {
         JSONObject previouslyLiked = new JSONObject();
         try {
             previouslyLiked.accumulate("LIKED", likedDishesArray);
+            previouslyLiked.accumulate("DISLIKED", dislikedDishesArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -96,33 +104,41 @@ public class RateActivity extends AppCompatActivity {
         task.SetJsonData(previouslyLiked);
         task.execute();
 
+        returnToMainActivity();
     }
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-
     private void fillInDishesToRate(){
         FileHandler fileHandler = new FileHandler();
-        String fileData = "";
-        try {
-            fileData = fileHandler.readFromFile(getApplicationContext());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        if(FileHandler.isInternalFileExists(getApplicationContext())){
+            String fileData = "";
+            try {
+                fileData = fileHandler.readFromFile(getApplicationContext());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
-        String[] arrDishes =  fileData.split("\n");
-        for (String DishData : arrDishes){
-            String[] DishDataText = DishData.split("!");
-            if (DishDataText.length > 0) {
-                String restName = DishDataText[0].replace("%20", " ");
-                RestaurantDish newDish = new RestaurantDish(restName, DishDataText[1], DishDataText[2]);
-                adapter.add(newDish);
+            String[] arrDishes =  fileData.split("\n");
+            for (String DishData : arrDishes){
+                String[] DishDataText = DishData.split(FILE_DELIMITER);
+                if (DishDataText.length > 0) {
+                    String restName = DishDataText[0].replace("%20", " ");
+                    RestaurantDish newDish = new RestaurantDish(restName, DishDataText[1], DishDataText[2]);
+                    adapter.add(newDish);
+                }
             }
         }
     }
 
+    private void returnToMainActivity(){
+        // go to the main activity
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+    }
 
     /// rest call task func
     @Override

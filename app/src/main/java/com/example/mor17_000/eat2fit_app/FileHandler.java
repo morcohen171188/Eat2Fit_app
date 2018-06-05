@@ -16,7 +16,6 @@ public class FileHandler {
     String filename = "Eat2Fit_UnratedDishes";
 
 
-
     public Boolean writeToFile(Context context, String fileContents){
         try {
             fileContents = fileContents.replace("\n", " - ");
@@ -50,5 +49,11 @@ public class FileHandler {
         File dir = context.getFilesDir();
         File file = new File(dir, "Eat2Fit_UnratedDishes");
         return file.delete();
+    }
+
+    public static boolean isInternalFileExists(Context context){
+        File dir = context.getFilesDir();
+        File file = new File(dir, "Eat2Fit_UnratedDishes");
+        return file.exists();
     }
 }
