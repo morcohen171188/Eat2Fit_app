@@ -144,19 +144,13 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // execute after delay:
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        if (isLoginSuccsessful)
-                        {
-                            onLoginSuccess();
-                        }else {
-                            onLoginFailed();
-                        }
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+        if (isLoginSuccsessful)
+        {
+            onLoginSuccess();
+        }else {
+            onLoginFailed();
+        }
+        progressDialog.dismiss();
     }
 
     @Override

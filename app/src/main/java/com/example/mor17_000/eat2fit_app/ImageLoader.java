@@ -10,12 +10,15 @@ import com.squareup.picasso.Picasso;
 
 public class ImageLoader {
     public static void imageLoadFromWeb(String url, ImageView imgView){
-        Picasso.get()
-                .load(url)
-                .fit()
-                .centerCrop()
-                .placeholder(R.drawable.meal)
-                .error(R.drawable.meal)
-                .into(imgView);
+        if (!url.equals("")){
+            Picasso.get()
+                    .load(url)
+                    .fit()
+                    .centerCrop()
+                    .placeholder(R.drawable.meal)
+                    .error(R.drawable.meal)
+                    .into(imgView);
+        }
+
     }
 }
